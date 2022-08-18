@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'sound_card.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,21 +34,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double currentSliderValue = 0.5;
-
-  final AudioCache cache = AudioCache();
-  final player = AudioPlayer();
-  // final player = AudioPlayer(playerId: 'my_unique_playerId');
-
-  void playSound(String fileName) async {
-    await player.setReleaseMode(ReleaseMode.loop);
-    await player.play(AssetSource(fileName), volume: currentSliderValue);
-  }
-
-  void stopSound() async {
-    await player.stop();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,64 +42,31 @@ class _HomePageState extends State<HomePage> {
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              Card(
-                color: Colors.grey.shade800,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      FontAwesomeIcons.cloudRain,
-                      size: 36.0,
-                      color: Colors.amber,
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Text(
-                              'Rain',
-                              style: TextStyle(
-                                  fontSize: 24.0, color: Colors.amber),
-                            ),
-                            Slider(
-                                value: currentSliderValue,
-                                min: 0,
-                                max: 1,
-                                onChanged: (double newValue) {
-                                  setState(() {
-                                    currentSliderValue = newValue;
-                                    player.setVolume(newValue);
-                                  });
-                                }),
-                          ],
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        playSound('rain.wav');
-                      },
-                      icon: const Icon(
-                        FontAwesomeIcons.play,
-                        size: 24.0,
-                        color: Colors.amber,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        stopSound();
-                      },
-                      icon: const Icon(
-                        FontAwesomeIcons.stop,
-                        size: 24.0,
-                        color: Colors.amber,
-                      ),
-                    ),
-                  ],
-                ),
+              SoundCard(
+                soundName: 'Heavy Rain',
+                fileName: '527498__timothyd4y__rain-on-sidewalk.wav',
+                soundIconData: FontAwesomeIcons.cloudShowersHeavy,
+              ),
+              SoundCard(
+                soundName: 'Heavy Rain with Thunder',
+                fileName:
+                    '164206__danjocross__rain-very-heavy-with-thunder.wav',
+                soundIconData: FontAwesomeIcons.cloudBolt,
+              ),
+              SoundCard(
+                soundName: 'High wind',
+                fileName: '559094__vital-sounds__high-wind-2.wav',
+                soundIconData: FontAwesomeIcons.wind,
+              ),
+              SoundCard(
+                soundName: 'Cat 1 purr',
+                fileName: '561176__philsapphire__cat-purr.wav',
+                soundIconData: FontAwesomeIcons.cat,
+              ),
+              SoundCard(
+                soundName: 'Cat 2 purr',
+                fileName: '624162__atakantrcn__purr.wav',
+                soundIconData: FontAwesomeIcons.cat,
               ),
             ],
           ),
