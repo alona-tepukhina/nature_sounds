@@ -37,11 +37,11 @@ class _HomePageState extends State<HomePage> {
 
   final AudioCache cache = AudioCache();
   final player = AudioPlayer();
+  // final player = AudioPlayer(playerId: 'my_unique_playerId');
 
   void playSound(String fileName) async {
-    await player.play(AssetSource(fileName), volume: 1.0);
-    // await player.setSource(AssetSource('sounds/$fileName'));
-    // await player.setVolume(0.8);
+    await player.setReleaseMode(ReleaseMode.loop);
+    await player.play(AssetSource(fileName), volume: currentSliderValue);
   }
 
   void stopSound() async {
@@ -58,7 +58,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               Card(
                 color: Colors.grey.shade800,
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,6 +85,7 @@ class _HomePageState extends State<HomePage> {
                                 onChanged: (double newValue) {
                                   setState(() {
                                     currentSliderValue = newValue;
+                                    player.setVolume(newValue);
                                   });
                                 }),
                           ],
