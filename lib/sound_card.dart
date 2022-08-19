@@ -3,12 +3,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SoundCard extends StatefulWidget {
-  SoundCard({
+  const SoundCard({
     Key? key,
     this.soundIconData = FontAwesomeIcons.itunesNote,
     required this.soundName,
     required this.fileName,
-  }) : super(key: key) {}
+  }) : super(key: key);
 
   final String soundName;
   final String fileName;

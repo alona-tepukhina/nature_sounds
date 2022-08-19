@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: ListView(
             scrollDirection: Axis.vertical,
-            children: [
+            children: const [
               SoundCard(
                 soundName: 'Heavy Rain',
                 fileName: '527498__timothyd4y__rain-on-sidewalk.wav',
