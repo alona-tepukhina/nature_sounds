@@ -14,6 +14,9 @@ class SoundCard extends StatefulWidget {
   final String fileName;
   final IconData soundIconData;
 
+  static final Color? inactiveCardColor = Colors.grey[800];
+  static final Color? activeCardColor = Colors.blueGrey[800];
+
   //static int playerId = 0;
 
   @override
@@ -22,12 +25,15 @@ class SoundCard extends StatefulWidget {
 
 class _SoundCardState extends State<SoundCard> {
   double currentVolume = 0.5;
+  IconData playStopIcon = FontAwesomeIcons.play;
+  bool isPlayed = false;
+  Color? cardColor = SoundCard.inactiveCardColor;
+  //bool sliderVisibility = false;
 
   final player = AudioPlayer();
 
   void playSound(String fileName) async {
     await player.setReleaseMode(ReleaseMode.loop);
-
     await player.play(AssetSource(fileName), volume: currentVolume);
   }
 
@@ -37,29 +43,30 @@ class _SoundCardState extends State<SoundCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey.shade800,
-      margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            widget.soundIconData,
-            size: 36.0,
-            color: Colors.amber,
-          ),
-          Column(
-            children: [
-              Column(
-                children: [
-                  Text(
-                    widget.soundName,
-                    style: const TextStyle(fontSize: 18.0, color: Colors.amber),
-                  ),
-                  Slider(
+    return SizedBox(
+      height: 100,
+      child: Card(
+        color: cardColor,
+        margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              widget.soundIconData,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      widget.soundName,
+                      style:
+                          const TextStyle(fontSize: 16.0, color: Colors.amber),
+                    ),
+                    Slider(
                       value: currentVolume,
-                      //value: 0.5,
                       min: 0,
                       max: 1,
                       onChanged: (double newValue) {
@@ -67,32 +74,36 @@ class _SoundCardState extends State<SoundCard> {
                           currentVolume = newValue;
                           player.setVolume(newValue);
                         });
-                      }),
-                ],
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  if (isPlayed == false) {
+                    playStopIcon = FontAwesomeIcons.pause;
+                    playSound(widget.fileName);
+                    cardColor = SoundCard.activeCardColor;
+                    isPlayed = true;
+                  } else {
+                    playStopIcon = FontAwesomeIcons.play;
+                    stopSound();
+                    cardColor = SoundCard.inactiveCardColor;
+                    isPlayed = false;
+                  }
+                });
+              },
+              icon: Icon(
+                playStopIcon,
+                size: 32.0,
+                // color: Colors.amber,
               ),
-            ],
-          ),
-          IconButton(
-            onPressed: () {
-              playSound(widget.fileName);
-            },
-            icon: const Icon(
-              FontAwesomeIcons.play,
-              size: 24.0,
-              color: Colors.amber,
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              stopSound();
-            },
-            icon: const Icon(
-              FontAwesomeIcons.stop,
-              size: 24.0,
-              color: Colors.amber,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
