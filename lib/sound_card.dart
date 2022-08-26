@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+List<AudioPlayer> allPlayers = [];
+
 class SoundCard extends StatefulWidget {
   const SoundCard({
     Key? key,
@@ -28,17 +30,33 @@ class _SoundCardState extends State<SoundCard> {
   IconData playStopIcon = FontAwesomeIcons.play;
   bool isPlayed = false;
   Color? cardColor = SoundCard.inactiveCardColor;
+
   //bool sliderVisibility = false;
 
   final player = AudioPlayer();
 
-  void playSound(String fileName) async {
-    await player.setReleaseMode(ReleaseMode.loop);
-    await player.play(AssetSource(fileName), volume: currentVolume);
-  }
+  // void playSound(String fileName) async {
+  //   await player.setReleaseMode(ReleaseMode.loop);
+  //   await player.play(AssetSource(fileName), volume: currentVolume);
+  // }
+  //
+  // void stopSound() async {
+  //   await player.stop();
+  // }
 
-  void stopSound() async {
-    await player.stop();
+  void playStop() async {
+    if (isPlayed == false) {
+      isPlayed = true;
+      cardColor = SoundCard.activeCardColor;
+      playStopIcon = FontAwesomeIcons.pause;
+      await player.setReleaseMode(ReleaseMode.loop);
+      await player.play(AssetSource(widget.fileName), volume: currentVolume);
+    } else {
+      isPlayed = false;
+      playStopIcon = FontAwesomeIcons.play;
+      cardColor = SoundCard.inactiveCardColor;
+      await player.stop();
+    }
   }
 
   @override
@@ -73,6 +91,10 @@ class _SoundCardState extends State<SoundCard> {
                         setState(() {
                           currentVolume = newValue;
                           player.setVolume(newValue);
+
+                          // if (newValue > 0.1) {
+                          //   playStop();
+                          // }
                         });
                       },
                     ),
@@ -83,23 +105,12 @@ class _SoundCardState extends State<SoundCard> {
             IconButton(
               onPressed: () {
                 setState(() {
-                  if (isPlayed == false) {
-                    playStopIcon = FontAwesomeIcons.pause;
-                    playSound(widget.fileName);
-                    cardColor = SoundCard.activeCardColor;
-                    isPlayed = true;
-                  } else {
-                    playStopIcon = FontAwesomeIcons.play;
-                    stopSound();
-                    cardColor = SoundCard.inactiveCardColor;
-                    isPlayed = false;
-                  }
+                  playStop();
                 });
               },
               icon: Icon(
                 playStopIcon,
                 size: 32.0,
-                // color: Colors.amber,
               ),
             ),
           ],
