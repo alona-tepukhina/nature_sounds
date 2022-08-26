@@ -1,6 +1,6 @@
 # nature_sounds
 
-Flutter mobile application for playing sounds of nature as asset files. Allow playing multiple files at ones. Made using Audioplayers package.
+Mobile player of asset sounds file made in Flutter using Audioplayers package.Allows playing multiple files at once.
 
-App icon by [Maria Shukshina](https://icons8.com/illustrations/author/8EFXLhT3w7gp) 
+Illustration used as application icon is created by [Maria Shukshina](https://icons8.com/illustrations/author/8EFXLhT3w7gp) 
 from https://icons8.com/illustrations
