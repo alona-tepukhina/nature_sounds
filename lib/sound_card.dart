@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-List<AudioPlayer> allPlayers = [];
-
 class SoundCard extends StatefulWidget {
   const SoundCard({
     Key? key,
+    required this.player,
     this.soundIconData = FontAwesomeIcons.itunesNote,
     required this.soundName,
     required this.fileName,
@@ -15,6 +14,7 @@ class SoundCard extends StatefulWidget {
   final String soundName;
   final String fileName;
   final IconData soundIconData;
+  final AudioPlayer player;
 
   static final Color? inactiveCardColor = Colors.grey[800];
   static final Color? activeCardColor = Colors.blueGrey[800];
@@ -31,31 +31,17 @@ class _SoundCardState extends State<SoundCard> {
   bool isPlayed = false;
   Color? cardColor = SoundCard.inactiveCardColor;
 
-  //bool sliderVisibility = false;
-
-  final player = AudioPlayer();
-
-  // void playSound(String fileName) async {
-  //   await player.setReleaseMode(ReleaseMode.loop);
-  //   await player.play(AssetSource(fileName), volume: currentVolume);
-  // }
-  //
-  // void stopSound() async {
-  //   await player.stop();
-  // }
-
   void playStop() async {
-    if (isPlayed == false) {
-      isPlayed = true;
+    if (widget.player.state == PlayerState.stopped) {
       cardColor = SoundCard.activeCardColor;
       playStopIcon = FontAwesomeIcons.pause;
-      await player.setReleaseMode(ReleaseMode.loop);
-      await player.play(AssetSource(widget.fileName), volume: currentVolume);
-    } else {
-      isPlayed = false;
+      await widget.player
+          .play(AssetSource(widget.fileName), volume: currentVolume);
+    } else if (widget.player.state == PlayerState.playing) {
+      //isPlayed = false;
       playStopIcon = FontAwesomeIcons.play;
       cardColor = SoundCard.inactiveCardColor;
-      await player.stop();
+      await widget.player.stop();
     }
   }
 
@@ -90,7 +76,7 @@ class _SoundCardState extends State<SoundCard> {
                       onChanged: (double newValue) {
                         setState(() {
                           currentVolume = newValue;
-                          player.setVolume(newValue);
+                          widget.player.setVolume(newValue);
 
                           // if (newValue > 0.1) {
                           //   playStop();
