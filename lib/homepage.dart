@@ -41,12 +41,6 @@ class _HomePageState extends State<HomePage> {
             ),
             SoundCard(
               player: HomePage.createPlayer(),
-              soundName: 'Heavy Rain with Thunder',
-              fileName: '164206__danjocross__rain-very-heavy-with-thunder.wav',
-              soundIconData: FontAwesomeIcons.cloudBolt,
-            ),
-            SoundCard(
-              player: HomePage.createPlayer(),
               soundName: 'High wind',
               fileName: '559094__vital-sounds__high-wind-2.wav',
               soundIconData: FontAwesomeIcons.wind,
