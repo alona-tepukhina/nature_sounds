@@ -70,13 +70,13 @@ class _HomePageState extends State<HomePage> {
           margin: const EdgeInsets.only(bottom: 16),
           elevation: 24,
           child: SizedBox(
-            width: 240,
+            //width: 240,
             height: 64,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 24, right: 32),
+                  padding: const EdgeInsets.only(left: 24, right: 24),
                   child: Text(
                     playStopAllText,
                     style: const TextStyle(fontSize: 20),
