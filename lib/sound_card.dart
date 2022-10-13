@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:nature_sounds/homepage.dart';
+import 'sound_player.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SoundCard extends StatefulWidget {
@@ -32,16 +34,18 @@ class _SoundCardState extends State<SoundCard> {
   Color? cardColor = SoundCard.inactiveCardColor;
 
   void playStop() async {
-    if (widget.player.state == PlayerState.stopped) {
+    if (widget.player.state == PlayerState.playing) {
+      playStopIcon = FontAwesomeIcons.play;
+      cardColor = SoundCard.inactiveCardColor;
+      await widget.player.pause();
+      HomePage.playersNow.remove(widget.player);
+    } else {
+      //isPlayed = false;
       cardColor = SoundCard.activeCardColor;
       playStopIcon = FontAwesomeIcons.pause;
       await widget.player
           .play(AssetSource(widget.fileName), volume: currentVolume);
-    } else if (widget.player.state == PlayerState.playing) {
-      //isPlayed = false;
-      playStopIcon = FontAwesomeIcons.play;
-      cardColor = SoundCard.inactiveCardColor;
-      await widget.player.stop();
+      HomePage.playersNow.add(widget.player);
     }
   }
 

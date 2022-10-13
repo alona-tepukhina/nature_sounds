@@ -6,15 +6,8 @@ import 'package:audioplayers/audioplayers.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  static List<AudioPlayer> players = [];
+  //static List<AudioPlayer> players = [];
   static List<AudioPlayer> playersNow = [];
-
-  static AudioPlayer createPlayer() {
-    AudioPlayer player = AudioPlayer();
-    player.setReleaseMode(ReleaseMode.loop);
-    players.add(player);
-    return player;
-  }
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -34,43 +27,37 @@ class _HomePageState extends State<HomePage> {
           children: [
             const SizedBox(height: 4.0),
             SoundCard(
-              player: HomePage.createPlayer(),
+              player: AudioPlayer(),
               soundName: 'Heavy Rain',
               fileName: '527498__timothyd4y__rain-on-sidewalk.wav',
               soundIconData: FontAwesomeIcons.cloudShowersHeavy,
             ),
             SoundCard(
-              player: HomePage.createPlayer(),
-              soundName: 'High wind',
-              fileName: '559094__vital-sounds__high-wind-2.wav',
-              soundIconData: FontAwesomeIcons.wind,
-            ),
-            SoundCard(
-              player: HomePage.createPlayer(),
+              player: AudioPlayer(),
               soundName: 'Cat 1 purr',
               fileName: '561176__philsapphire__cat-purr.wav',
               soundIconData: FontAwesomeIcons.cat,
             ),
             SoundCard(
-              player: HomePage.createPlayer(),
+              player: AudioPlayer(),
               soundName: 'Cat 2 purr',
               fileName: '624162__atakantrcn__purr.wav',
               soundIconData: FontAwesomeIcons.cat,
             ),
             SoundCard(
-              player: HomePage.createPlayer(),
+              player: AudioPlayer(),
               soundName: 'Canary',
               fileName: '85401__readeonly__canaryartie-1.wav',
               soundIconData: FontAwesomeIcons.dove,
             ),
             SoundCard(
-              player: HomePage.createPlayer(),
+              player: AudioPlayer(),
               soundName: 'River',
               fileName: '459406__pfannkuchn__small-river-1-fast-distant.wav',
               soundIconData: FontAwesomeIcons.water,
             ),
             SoundCard(
-              player: HomePage.createPlayer(),
+              player: AudioPlayer(),
               soundName: 'Train',
               fileName: '202341__eriaperse__ter-court.mp3',
               soundIconData: FontAwesomeIcons.train,
@@ -99,12 +86,11 @@ class _HomePageState extends State<HomePage> {
                 IconButton(
                   onPressed: () {
                     setState(() {
-                      if (HomePage.players.any((player) =>
+                      if (HomePage.playersNow.any((player) =>
                               player.state == PlayerState.playing) ==
                           true) {
-                        for (var player in HomePage.players) {
+                        for (var player in HomePage.playersNow) {
                           if (player.state == PlayerState.playing) {
-                            HomePage.playersNow.add(player);
                             player.pause();
                           }
                         }
@@ -114,7 +100,6 @@ class _HomePageState extends State<HomePage> {
                         for (var player in HomePage.playersNow) {
                           player.resume();
                         }
-                        HomePage.playersNow.clear();
                         playStopIcon = FontAwesomeIcons.pause;
                         playStopAllText = 'Pause all';
                       }
