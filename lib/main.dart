@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nature_sounds/play_stop_provider.dart';
+import 'package:provider/provider.dart';
 import 'homepage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => PlayStopProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +25,7 @@ class MyApp extends StatelessWidget {
 
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Nature sounds'),
+          title: const Text('Calming sounds'),
           centerTitle: true,
         ),
         body: const HomePage(),

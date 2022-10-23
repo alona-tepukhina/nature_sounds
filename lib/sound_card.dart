@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nature_sounds/homepage.dart';
-import 'sound_player.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nature_sounds/play_stop_provider.dart';
+import 'package:provider/provider.dart';
 
 class SoundCard extends StatefulWidget {
-  const SoundCard({
+  SoundCard({
     Key? key,
     required this.player,
     this.soundIconData = FontAwesomeIcons.itunesNote,
     required this.soundName,
     required this.fileName,
-  }) : super(key: key);
+  }) : super(key: key) {
+    player.setReleaseMode(ReleaseMode.loop);
+  }
 
   final String soundName;
   final String fileName;
@@ -29,79 +32,80 @@ class SoundCard extends StatefulWidget {
 
 class _SoundCardState extends State<SoundCard> {
   double currentVolume = 0.5;
-  IconData playStopIcon = FontAwesomeIcons.play;
+
   bool isPlayed = false;
   Color? cardColor = SoundCard.inactiveCardColor;
 
   void playStop() async {
+    //isPlayed = !isPlayed;
+
     if (widget.player.state == PlayerState.playing) {
-      playStopIcon = FontAwesomeIcons.play;
+      //if (isPlayed = true) {
       cardColor = SoundCard.inactiveCardColor;
+      isPlayed = false;
       await widget.player.pause();
-      HomePage.playersNow.remove(widget.player);
+      context.read<PlayStopProvider>().togglePlayMultiple(false);
+
+      HomePage.playersNowCards.remove(widget);
     } else {
-      //isPlayed = false;
       cardColor = SoundCard.activeCardColor;
-      playStopIcon = FontAwesomeIcons.pause;
+      isPlayed = true;
       await widget.player
           .play(AssetSource(widget.fileName), volume: currentVolume);
-      HomePage.playersNow.add(widget.player);
+
+      HomePage.playersNowCards.add(widget);
+      context.read<PlayStopProvider>().togglePlayMultiple(true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
+    // widget.player.setReleaseMode(ReleaseMode.loop);
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          playStop();
+        });
+      },
       child: Card(
         color: cardColor,
-        margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
-        child: Row(
+        //margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              widget.soundIconData,
-            ),
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    Text(
-                      widget.soundName,
-                      style:
-                          const TextStyle(fontSize: 16.0, color: Colors.amber),
-                    ),
-                    Slider(
-                      value: currentVolume,
-                      min: 0,
-                      max: 1,
-                      onChanged: (double newValue) {
-                        setState(() {
-                          currentVolume = newValue;
-                          widget.player.setVolume(newValue);
-
-                          // if (newValue > 0.1) {
-                          //   playStop();
-                          // }
-                        });
-                      },
-                    ),
-                  ],
+                Icon(
+                  widget.soundIconData,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  widget.soundName,
+                  style: const TextStyle(fontSize: 16.0, color: Colors.amber),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Visibility(
+                  //visible: false,
+                  visible: isPlayed,
+                  child: Slider(
+                    value: currentVolume,
+                    min: 0,
+                    max: 1,
+                    onChanged: (double newValue) {
+                      setState(() {
+                        currentVolume = newValue;
+                        widget.player.setVolume(newValue);
+                      });
+                    },
+                  ),
                 ),
               ],
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  playStop();
-                });
-              },
-              icon: Icon(
-                playStopIcon,
-                size: 32.0,
-              ),
             ),
           ],
         ),
